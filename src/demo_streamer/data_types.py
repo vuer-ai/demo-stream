@@ -8,7 +8,7 @@ from typing import Literal
 # Data type literals
 DataType = Literal[
     "time_series",
-    "parameters", 
+    "parameters",
     "images",
     "video",
     "audio",
@@ -23,12 +23,13 @@ DataType = Literal[
     "msgpack",
     "vuer_msg",
     "zip",
-    "tar"
+    "tar",
 ]
 
 
 class TimeSeries:
     """Time series data type definition."""
+
     type = "time_series"
     mimeType = "application/json"
     mimeTypes = ["application/json", "application/x-msgpack", "application/cbor"]
@@ -39,6 +40,7 @@ class TimeSeries:
 
 class Parameters:
     """Parameters data type definition."""
+
     type = "parameters"
     mimeType = "application/json"
     mimeTypes = ["application/json", "application/yaml", "application/toml"]
@@ -49,36 +51,31 @@ class Parameters:
 
 class Images:
     """Images data type definition."""
+
     type = "images"
     mimeType = "image/jpeg"
-    mimeTypes = [
-        "image/jpeg", "image/png", "image/webp", "image/tiff",
-        "image/bmp", "image/gif", "image/svg+xml", "image/x-raw"
-    ]
+    mimeTypes = ["image/jpeg", "image/png", "image/webp", "image/tiff", "image/bmp", "image/gif", "image/svg+xml", "image/x-raw"]
 
 
 class Video:
     """Video data type definition."""
+
     type = "video"
     mimeType = "video/mp4"
-    mimeTypes = [
-        "video/mp4", "video/webm", "video/x-msvideo", "video/quicktime",
-        "video/x-matroska", "video/H264", "video/H265"
-    ]
+    mimeTypes = ["video/mp4", "video/webm", "video/x-msvideo", "video/quicktime", "video/x-matroska", "video/H264", "video/H265"]
 
 
 class Audio:
     """Audio data type definition."""
+
     type = "audio"
     mimeType = "audio/mpeg"
-    mimeTypes = [
-        "audio/mpeg", "audio/wav", "audio/ogg", "audio/webm",
-        "audio/aac", "audio/flac", "audio/opus"
-    ]
+    mimeTypes = ["audio/mpeg", "audio/wav", "audio/ogg", "audio/webm", "audio/aac", "audio/flac", "audio/opus"]
 
 
 class Log:
     """Log data type definition."""
+
     type = "log"
     mimeType = "text/plain"
     mimeTypes = ["text/plain", "application/x-ndjson", "text/x-log"]
@@ -86,6 +83,7 @@ class Log:
 
 class Markdown:
     """Markdown data type definition."""
+
     type = "markdown"
     mimeType = "text/markdown"
     mimeTypes = ["text/markdown", "text/x-markdown", "text/plain"]
@@ -93,6 +91,7 @@ class Markdown:
 
 class File:
     """Generic file data type definition."""
+
     type = "file"
     mimeType = "application/octet-stream"
     mimeTypes = ["application/octet-stream", "*/*"]
@@ -100,6 +99,7 @@ class File:
 
 class Csv:
     """CSV data type definition."""
+
     type = "csv"
     mimeType = "text/csv"
     mimeTypes = ["text/csv", "application/csv", "text/tab-separated-values"]
@@ -107,6 +107,7 @@ class Csv:
 
 class Safetensors:
     """Safetensors data type definition."""
+
     type = "safetensors"
     mimeType = "application/x-safetensors"
     mimeTypes = ["application/x-safetensors", "application/octet-stream"]
@@ -114,6 +115,7 @@ class Safetensors:
 
 class Json:
     """JSON data type definition."""
+
     type = "json"
     mimeType = "application/json"
     mimeTypes = ["application/json", "text/json", "application/ld+json"]
@@ -124,6 +126,7 @@ class Json:
 
 class Yaml:
     """YAML data type definition."""
+
     type = "yaml"
     mimeType = "application/yaml"
     mimeTypes = ["application/yaml", "text/yaml", "application/x-yaml"]
@@ -134,6 +137,7 @@ class Yaml:
 
 class Toml:
     """TOML data type definition."""
+
     type = "toml"
     mimeType = "application/toml"
     mimeTypes = ["application/toml", "text/toml"]
@@ -144,6 +148,7 @@ class Toml:
 
 class Msgpack:
     """MessagePack binary serialization format."""
+
     type = "msgpack"
     mimeType = "application/x-msgpack"
     mimeTypes = ["application/x-msgpack", "application/msgpack"]
@@ -155,11 +160,12 @@ class Msgpack:
 
 class VuerMsg:
     """Vuer message format - MessagePack serialized with $dtype field.
-    
+
     This is a MessagePack-encoded binary format where each message
     contains a special '$dtype' key that specifies the output type
     for proper deserialization and handling.
     """
+
     type = "vuer_msg"
     mimeType = "application/x-vuer-msg"
     mimeTypes = ["application/x-vuer-msg", "application/vuer"]
@@ -174,6 +180,7 @@ class VuerMsg:
 
 class Zip:
     """ZIP archive format for compressed file collections."""
+
     type = "zip"
     mimeType = "application/zip"
     mimeTypes = ["application/zip", "application/x-zip-compressed"]
@@ -186,6 +193,7 @@ class Zip:
 
 class Tar:
     """TAR archive format for file collections."""
+
     type = "tar"
     mimeType = "application/x-tar"
     mimeTypes = [
@@ -193,7 +201,7 @@ class Tar:
         "application/x-gtar",
         "application/x-gzip",  # for .tar.gz
         "application/x-bzip2",  # for .tar.bz2
-        "application/x-xz"      # for .tar.xz
+        "application/x-xz",  # for .tar.xz
     ]
     patterns = ["*.tar", "*.tar.gz", "*.tgz", "*.tar.bz2", "*.tbz", "*.tar.xz", "*.txz"]
     isArchive = True

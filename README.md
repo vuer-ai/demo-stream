@@ -57,36 +57,62 @@ We use a hybrid storage approach optimized for both real-time streaming and hist
   ```
   s3://fortyfive-robot-data/{prefix-id}
   ├── raw/
-  │   ├── frames/
-  │   │   ├── {timestamp}_rgb.jpg
-  │   │   ├── {timestamp}_depth.png
-  │   │   └── {timestamp}_pointcloud.ply
-  │   └── compressed/
-  │       └── {hour}_bundle.tar.gz
+  │   ├── camera/ego/
+  │   │   ├── rgb/
+  │   │   │   ├── {timestamp}.jpg
+  │   │   │   └── meta.jsonl
+  │   │   └── depth/
+  │   │       ├── {timestamp}.png
+  │   │       └── meta.jsonl
+  │   ├── lidar/
+  │   │   └── pointcloud/
+  │   │       ├── {timestamp}.ply
+  │   │       └── meta.jsonl
+  │   └── logs/
+  │       ├── system/
+  │       │   ├── {log_id}.log
+  │       │   └── meta.jsonl
+  │       ├── telemetry/
+  │       │   ├── {log_id}.jsonl
+  │       │   └── meta.jsonl
+  │       └── events/
+  │           ├── {log_id}.jsonl
+  │           └── meta.jsonl
+  ├── compressed/
+  │   ├── camera/ego/
+  │   │   ├── rgb/
+  │   │   │   ├── {lot_id}.mp4
+  │   │   │   └── meta.jsonl
+  │   │   └── depth/
+  │   │       ├── {lot_id}.tar.gz
+  │   │       └── meta.jsonl
+  │   ├── lidar/
+  │   │   └── pointcloud/
+  │   │       ├── {lot_id}.tar.gz
+  │   │       └── meta.jsonl
+  │   ├── logs/
+  │   │   ├── system/
+  │   │   │   ├── {log_id}.tar.gz
+  │   │   │   └── meta.jsonl
+  │   │   ├── telemetry/
+  │   │   │   ├── {log_id}.tar.gz
+  │   │   │   └── meta.jsonl
+  │   │   └── events/
+  │   │       ├── {log_id}.tar.gz
+  │   │       └── meta.jsonl
+  │   └── bundles/
+  │       └── {lot_id}_complete.tar.gz
   └── processed/
       └── {robot_id}/
           └── {session_id}/
               └── thumbnails/
   ```
 
-## Hot Loading & Visualization
-
-### Caching Strategy
-
-The system implements a multi-tier caching strategy for optimal visualization performance:
-
-#### 1. Edge Cache (CDN)
-
-- **CloudFront** distribution for S3 binary objects
-- Automatic geographic distribution
-- 24-hour TTL for processed data
-- 1-hour TTL for raw streaming data
-
 ### Data Compaction
 
 Camera feeds are compacted using multiple strategies:
 
-#### 1. Real-time Compression
+#### 1. Client side compression
 
 - **H.264** for RGB streams (70% size reduction)
 - **PNG** with zlib for depth maps (50% reduction)

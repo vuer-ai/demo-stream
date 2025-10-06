@@ -1,1 +1,0 @@
-"""Types package for demo-streamer."""
