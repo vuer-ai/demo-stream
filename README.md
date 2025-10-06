@@ -162,17 +162,6 @@ The simulator generates approximately:
 - **Time-range query**: < 1s for 1 hour of data
 - **Aggregations**: < 200ms for pre-computed stats
 
-## Sample Output
-
-```
-[2024-01-15 10:23:45] Robot robot_001 connected
-[2024-01-15 10:23:45] Streaming started: 100Hz telemetry, 30Hz sensors
-[2024-01-15 10:23:46] Batch sent: 100 messages (12.3KB)
-[2024-01-15 10:23:47] Batch sent: 100 messages (12.1KB)
-...
-[2024-01-15 10:28:45] Session complete: 300s, 30,000 messages sent
-```
-
 ## Development
 
 ### Adding New Data Types
