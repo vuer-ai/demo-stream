@@ -55,16 +55,14 @@ We use a hybrid storage approach optimized for both real-time streaming and hist
 - **Purpose**: Store large binary data (camera frames, point clouds)
 - **Structure**:
   ```
-  s3://fortyfive-robot-data/
+  s3://fortyfive-robot-data/{prefix-id}
   ├── raw/
-  │   ├── {robot_id}/
-  │   │   ├── {session_id}/
-  │   │   │   ├── frames/
-  │   │   │   │   ├── {timestamp}_rgb.jpg
-  │   │   │   │   ├── {timestamp}_depth.png
-  │   │   │   │   └── {timestamp}_pointcloud.ply
-  │   │   │   └── compressed/
-  │   │   │       └── {hour}_bundle.tar.gz
+  │   ├── frames/
+  │   │   ├── {timestamp}_rgb.jpg
+  │   │   ├── {timestamp}_depth.png
+  │   │   └── {timestamp}_pointcloud.ply
+  │   └── compressed/
+  │       └── {hour}_bundle.tar.gz
   └── processed/
       └── {robot_id}/
           └── {session_id}/
@@ -171,38 +169,6 @@ pytest client/tests/
 # Integration test
 ./run_integration_test.sh
 ```
-
-## Implementation Notes
-
-### Network Optimization
-
-- WebSocket connection pooling for multiple robots
-- Message batching reduces overhead by 70%
-- Automatic backpressure handling when server is slow
-- Local buffering during network interruptions
-- Binary protocol (MessagePack) for 40% size reduction
-
-### Database Optimization
-
-- Time-series collections with automatic sharding
-- Compound indexes on (robot_id, session_id, timestamp)
-- TTL indexes for automatic data expiration
-- Aggregation pipelines for real-time statistics
-
-### S3 Optimization
-
-- Multipart uploads for large files
-- Intelligent tiering for cost optimization
-- Batch operations for frame bundles
-- Pre-signed URLs with 1-hour expiry
-
-### Visualization Optimization
-
-- Virtual scrolling for large datasets
-- Level-of-detail (LOD) rendering
-- Progressive image loading
-- WebGL for 3D point cloud rendering
-- Web Workers for data processing
 
 ## License
 
