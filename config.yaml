@@ -1,0 +1,43 @@
+# Demo Streamer Configuration
+
+server:
+  url: ws://localhost:8080/ws
+  reconnect_interval: 5  # seconds
+  max_reconnect_attempts: 10
+
+simulation:
+  robots: 3
+  duration: 300  # seconds (5 minutes)
+  
+  # Data generation rates (Hz)
+  telemetry_rate: 100
+  sensor_rate: 30
+  metrics_rate: 1
+  
+  # Batching configuration
+  batch_size: 100
+  batch_timeout: 1.0  # seconds
+
+data:
+  # Robot workspace bounds
+  workspace:
+    x: [-2.0, 2.0]
+    y: [-2.0, 2.0]
+    z: [0.0, 2.0]
+  
+  # Joint limits (radians)
+  joint_limits:
+    min: -3.14159
+    max: 3.14159
+  
+  # Noise parameters
+  noise:
+    position: 0.001
+    velocity: 0.01
+    force: 1.0
+    torque: 0.1
+
+output:
+  save_to_file: true
+  output_dir: ./data
+  format: jsonl  # json lines format
