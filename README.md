@@ -162,15 +162,6 @@ The simulator generates approximately:
 - **Time-range query**: < 1s for 1 hour of data
 - **Aggregations**: < 200ms for pre-computed stats
 
-## Development
-
-### Adding New Data Types
-
-1. Define schema in `client/schemas.py`
-2. Add generator in `client/generators.py`
-3. Update server handler in `server/handlers.py`
-4. Add visualization in ml-dash
-
 ### Testing
 
 ```bash
