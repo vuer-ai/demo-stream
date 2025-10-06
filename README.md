@@ -71,142 +71,6 @@ We use a hybrid storage approach optimized for both real-time streaming and hist
               └── thumbnails/
   ```
 
-### MongoDB Schema Design
-
-```javascript
-// sessions collection
-{
-    _id: ObjectId,
-        robot_id
-:
-    String,
-        session_id
-:
-    String,
-        start_time
-:
-    ISODate,
-        end_time
-:
-    ISODate,
-        config
-:
-    {
-        sensors: Array,
-            sampling_rates
-    :
-        Object,
-            camera_config
-    :
-        Object
-    }
-,
-    stats: {
-        total_frames: Number,
-            total_telemetry_points
-    :
-        Number,
-            data_size_bytes
-    :
-        Number
-    }
-}
-
-// telemetry collection (time-series optimized)
-{
-    _id: ObjectId,
-        robot_id
-:
-    String,
-        session_id
-:
-    String,
-        timestamp
-:
-    ISODate,
-        bucket_hour
-:
-    ISODate,  // For efficient querying
-        data
-:
-    {
-        pose: {
-            position: {
-                x: Number, y
-            :
-                Number, z
-            :
-                Number
-            }
-        ,
-            orientation: {
-                x: Number, y
-            :
-                Number, z
-            :
-                Number, w
-            :
-                Number
-            }
-        }
-    ,
-        joints: Array,
-            sensors
-    :
-        Object
-    }
-}
-
-// frames_metadata collection
-{
-    _id: ObjectId,
-        robot_id
-:
-    String,
-        session_id
-:
-    String,
-        timestamp
-:
-    ISODate,
-        frame_number
-:
-    Number,
-        s3_urls
-:
-    {
-        rgb: String,
-            depth
-    :
-        String,
-            thumbnail
-    :
-        String
-    }
-,
-    metadata: {
-        width: Number,
-            height
-    :
-        Number,
-            format
-    :
-        String,
-            size_bytes
-    :
-        Number,
-            compression
-    :
-        String
-    }
-,
-    cached: Boolean,  // For hot loading optimization
-        cache_expiry
-:
-    ISODate
-}
-```
-
 ## Hot Loading & Visualization
 
 ### Caching Strategy
@@ -219,64 +83,6 @@ The system implements a multi-tier caching strategy for optimal visualization pe
 - Automatic geographic distribution
 - 24-hour TTL for processed data
 - 1-hour TTL for raw streaming data
-
-#### 2. Application Cache (Redis)
-
-```javascript
-// Cache structure
-redis_cache = {
-    // Recent telemetry (sliding window)
-    "telemetry:{robot_id}:{session_id}:latest": CircularBuffer(1000),
-
-    // Frame metadata with pre-signed URLs
-    "frames:{robot_id}:{session_id}:{frame_id}": {
-        urls: {rgb: "pre-signed-url", ...},
-        metadata: {...},
-        ttl: 3600  // 1 hour
-    },
-
-    // Pre-computed aggregations
-    "stats:{robot_id}:{session_id}:{metric}:{resolution}": Array,
-}
-```
-
-#### 3. Client-side Cache (Browser)
-
-- **IndexedDB** for offline visualization
-- **Memory cache** for active viewport data
-- **Service Worker** for progressive loading
-
-### Hot Loading Pipeline
-
-```
-1. Client Request → Check Browser Cache
-                    ↓ (miss)
-2. WebSocket/HTTP → Check Redis Cache
-                    ↓ (miss)
-3. Query MongoDB → Parallel S3 Pre-fetch
-                   ↓
-4. Stream to Client → Update Caches
-                      ↓
-5. Progressive Render → Background Pre-load
-```
-
-### Visualization Data Flow
-
-#### Real-time Stream (< 1 sec latency)
-
-```
-Robot → Data Manager → Redis Pub/Sub → WebSocket → ML-Dash
-```
-
-#### Historical Playback
-
-```
-ML-Dash → API Request → MongoDB Query → S3 Pre-signed URLs
-         ↓                    ↓              ↓
-    Time range          Metadata only    Binary on-demand
-         ↓                    ↓              ↓
-    Chunked Response    Immediate       Progressive load
-```
 
 ### Data Compaction
 
@@ -302,64 +108,12 @@ Preview:   640x360  → Storage: S3 standard
 Thumbnail: 120x68   → Storage: MongoDB GridFS
 ```
 
-## Topics Covered
-
-### 1. Data Types
-
-- **Pose Data**: Position (x, y, z) and orientation (quaternion)
-- **Joint States**: Joint angles, velocities, and torques for 7-DOF arm
-- **Sensor Data**: Force/torque sensors, IMU readings
-- **Camera Frames**: Actual RGB-D images and point clouds (compressed)
-- **System Metrics**: CPU usage, memory, network latency
-
 ### 2. Streaming Patterns
 
 - **High-frequency telemetry**: 100Hz pose updates
 - **Medium-frequency sensors**: 30Hz force/torque readings
 - **Low-frequency metrics**: 1Hz system health
 - **Burst mode**: Camera frame events at variable rates
-
-### 3. Message Formats
-
-#### Telemetry Message
-
-```python
-{
-    "timestamp": 1234567890.123,
-    "robot_id": "robot_001",
-    "session_id": "demo_session_001",
-    "data_type": "telemetry",
-    "payload": {
-        "pose": {...},
-        "joints": [...],
-        "sensors": {...}
-    }
-}
-```
-
-#### Camera Frame Message
-
-```python
-{
-    "timestamp": 1234567890.123,
-    "robot_id": "robot_001",
-    "session_id": "demo_session_001",
-    "data_type": "camera_frame",
-    "payload": {
-        "frame_number": 12345,
-        "camera_id": "front_rgb",
-        "format": "jpeg",
-        "encoding": "base64",
-        "data": "...",  # Compressed image data
-        "metadata": {
-            "width": 1920,
-            "height": 1080,
-            "original_size": 6220800,
-            "compressed_size": 184320
-        }
-    }
-}
-```
 
 ## Quick Start
 
@@ -372,10 +126,7 @@ pnpm dev
 
 ### 2. Run the Robot Simulator
 
-```bash
-cd demo-streamer/client
-python robot_simulator.py --robots 3 --duration 300
-```
+todo - TBD
 
 ### 3. View in ML-Dash
 
@@ -384,15 +135,6 @@ cd ../ml-dash
 pnpm dev
 # Open http://localhost:3000
 ```
-
-## Configuration
-
-Edit `config.yaml` to adjust:
-
-- Number of simulated robots
-- Data generation rates
-- WebSocket endpoint
-- Batching parameters
 
 ## Performance Metrics
 
