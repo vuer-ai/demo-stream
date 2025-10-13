@@ -1,6 +1,0 @@
-# Implementation Notes
-
-
-
-## Semantic Search
-
