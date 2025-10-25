@@ -12,7 +12,7 @@ cd client
 uv sync
 cd ..
 
-# Check if data-manager is running
+# Check if datalake is running
 if ! curl -s http://localhost:8080/health > /dev/null 2>&1; then
     echo "Warning: data-manager server is not running on port 8080"
     echo "Please start it with: cd ../data-manager && pnpm dev"

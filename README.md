@@ -144,7 +144,7 @@ Thumbnail: 120x68   → Storage: MongoDB GridFS
 ### 1. Start the Data Manager Server
 
 ```bash
-cd ../data-manager
+cd ../datalake
 pnpm dev
 ```
 
@@ -152,13 +152,8 @@ pnpm dev
 
 todo - TBD
 
-### 3. View in ML-Dash
-
-```bash
-cd ../ml-dash
-pnpm dev
-# Open http://localhost:3000
-```
+Now you can view the real-time data in vuer.ai, or the
+recorded data in the datalake.io dashboard.
 
 ## Performance Metrics
 
